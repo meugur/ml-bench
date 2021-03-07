@@ -4,7 +4,7 @@ set -e
 
 PERF=/usr/bin/perf
 
-CK_REPOS="${HOME}/ml-bench"
+CK_REPOS="$(pwd)"
 CK_IMAGE="mlperf-inference-vision-with-ck.intel.ubuntu-18.04"
 CK_IMAGE_W_TAG="ctuning/${CK_IMAGE}:tf-1.15"
 CK_EXPERIMENTS_DIR="$(pwd)/mlperf-inference-vision-results"
@@ -15,15 +15,23 @@ mkdir -p ${PERF_OUTPUT_DIR}
 
 CPU=0
 RUNS=1
-REPETITIONS=1
+REPETITIONS=10
 SCENARIO="SingleStream"
 MODEL="ssd,mobilenet-v1,fpn"
 TAG="ssd-mobilenet-v1-fpn"
 
-sudo $PERF stat -o "${PERF_OUTPUT_DIR}/${TAG}.log" \
-    -e cycles,cycles:k,instructions,instructions:k -C ${CPU} -r ${RUNS} -- \
-    docker run --env-file ${CK_REPOS}/ck-mlperf/docker/${CK_IMAGE}/env.list \
-    --user=$(id -u):1500 --volume ${CK_EXPERIMENTS_DIR}:/home/dvdt/CK_REPOS/local/experiment \
+echo 0 | sudo tee /proc/sys/kernel/nmi_watchdog
+echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid
+
+$PERF stat -o "${PERF_OUTPUT_DIR}/${TAG}.log" \
+    -e cycles,cycles:k,instructions,instructions:k \
+    -C ${CPU} \
+    -r ${RUNS} -- \
+    docker run \
+    --cpuset-cpus ${CPU} \
+    --env-file ${CK_REPOS}/ck-mlperf/docker/${CK_IMAGE}/env.list \
+    --user=$(id -u):1500 \
+    --volume ${CK_EXPERIMENTS_DIR}:/home/dvdt/CK_REPOS/local/experiment \
     --rm ${CK_IMAGE_W_TAG} \
     "ck benchmark program:mlperf-inference-vision \
     --cmd_key=direct \
@@ -45,3 +53,5 @@ sudo $PERF stat -o "${PERF_OUTPUT_DIR}/${TAG}.log" \
     --skip_stat_analysis \
     --process_multi_keys"
 
+echo 1 | sudo tee /proc/sys/kernel/nmi_watchdog
+echo 4 | sudo tee /proc/sys/kernel/perf_event_paranoid
