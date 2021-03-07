@@ -2,18 +2,23 @@
 
 set -e
 
+# Configurations
 PERF=/usr/bin/perf
-
+IMAGE="meugur/resnet34-patch"
 CPU=0
 RUNS=5
 BACKEND="tf"
-MODEL="resnet50"
+MODEL="ssd-resnet34"
 DEVICE="cpu"
 SCENARIO="SingleStream"
+DATASET="/root/datasets/coco-1200"
+DATAFORMAT="NHWC" # NCHW or NHWC
+MAXBATCHSIZE=128
 THREADS=1
 MAXTIME=100
-COUNT=10
+COUNT=50
 INTERVAL=100
+
 TAG="${MODEL}-${BACKEND}-${DEVICE}-${SCENARIO}"
 PERF_OUTPUT_DIR="$(pwd)/perf-output"
 
@@ -23,13 +28,18 @@ WORKLOAD=(
     'docker run --rm -it'
     "--cpuset-cpus ${CPU}"
     "--volume $(pwd)/reports:/root/inference/v0.5/classification_and_detection/output"
-    '-e DATA_DIR=/root/datasets/imagenet'
+    "-e DATA_DIR=${DATASET}"
     '-e MODEL_DIR=/root/models'
-    'nexgus/mlperf-inference:v0.5'
+    "${IMAGE}"
     'bash'
     'run_local.sh'
     "${BACKEND} ${MODEL} ${DEVICE}"
-    "--time ${MAXTIME} --scenario ${SCENARIO} --threads ${THREADS} --count ${COUNT}"
+    "--data-format ${DATAFORMAT}"
+    "--time ${MAXTIME}"
+    "--scenario ${SCENARIO}"
+    "--threads ${THREADS}"
+    "--count ${COUNT}"
+    "--max-batchsize ${MAXBATCHSIZE}"
 )
 
 # Setup benchmarking environment

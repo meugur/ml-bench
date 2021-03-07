@@ -1,0 +1,4 @@
+FROM nexgus/mlperf-inference:v0.5
+
+ADD ["resnet34_tf.22.1.pb", "/root/models/resnet34_tf.22.1.pb"]
+
