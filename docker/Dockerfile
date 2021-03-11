@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:16.04
 
 LABEL maintainer="Muhammed Ugur <meugur@umich.edu>"
 
@@ -48,7 +48,12 @@ RUN cd /root && git clone --recursive https://github.com/mlcommons/inference && 
     cd /root/inference/loadgen && \
     CFLAGS="-std=c++14" python setup.py install
 
-ADD ["datasets/*", "/root/datasets/"]
-ADD ["models/*", "/root/models/"]
+ADD ["datasets/", "/root/datasets/"]
+ADD ["models/", "/root/models/"]
+
+RUN python \
+    /root/inference/vision/classification_and_detection/tools/ssd-nhwc.py \
+    /root/models/resnet34_tf.22.1.pb && \
+    mv /root/models/resnet34_tf.22.1.pb.patch /root/models/resnet34_tf.22.1.pb
 
 WORKDIR /root/inference/vision/classification_and_detection
