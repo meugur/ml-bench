@@ -20,9 +20,6 @@ SCENARIO="SingleStream"
 MODEL="ssd,mobilenet-v1,fpn"
 TAG="ssd-mobilenet-v1-fpn"
 
-echo 0 | sudo tee /proc/sys/kernel/nmi_watchdog
-echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid
-
 $PERF stat -o "${PERF_OUTPUT_DIR}/${TAG}.log" \
     -e cycles,cycles:k,instructions,instructions:k \
     -C ${CPU} \
@@ -52,6 +49,3 @@ $PERF stat -o "${PERF_OUTPUT_DIR}/${TAG}.log" \
     --skip_print_timers \
     --skip_stat_analysis \
     --process_multi_keys"
-
-echo 1 | sudo tee /proc/sys/kernel/nmi_watchdog
-echo 4 | sudo tee /proc/sys/kernel/perf_event_paranoid
