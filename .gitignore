@@ -1,3 +1,5 @@
 env/
 reports/
 perf-output*
+docker/datasets/
+docker/models/
