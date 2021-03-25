@@ -4,14 +4,14 @@ set -e
 
 DEVICE="cpu"
 MODEL="ssd-resnet34"
-IMAGE="192.168.1.151:5000/mlperf-inference"
+IMAGE="meugur/mlperf-inference"
 
 # Configurations
 CPU=0
 BACKEND=${1:-"tf"}
 SCENARIO=${2:-"SingleStream"}
 DATASET="/root/datasets/coco-1200"
-DATAFORMAT="NHWC" # NCHW or NHWC
+DATAFORMAT="NCHW" # NCHW or NHWC
 MAXBATCHSIZE=128
 THREADS=1
 MAXTIME=120

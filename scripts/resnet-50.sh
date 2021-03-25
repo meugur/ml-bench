@@ -4,7 +4,7 @@ set -e
 
 DEVICE="cpu"
 MODEL="resnet50"
-IMAGE="192.168.1.151:5000/mlperf-inference"
+IMAGE="meugur/mlperf-inference"
 
 # Configurations
 CPU=0
@@ -36,6 +36,24 @@ WORKLOAD=(
     "--count ${COUNT}"
     "--max-batchsize ${MAXBATCHSIZE}"
 )
+
+if [[ ${BACKEND} == "pytorch" ]]; then
+    WORKLOAD=(
+        'docker run --rm -it'
+        "--cpuset-cpus ${CPU}"
+        "-e DATA_DIR=${DATASET}"
+        '-e MODEL_DIR=/root/models'
+        "${IMAGE}"
+        'bash'
+        'run_local.sh'
+        "${BACKEND} ${MODEL} ${DEVICE}"
+        "--time ${MAXTIME}"
+        "--scenario ${SCENARIO}"
+        "--threads ${THREADS}"
+        "--count ${COUNT}"
+        "--max-batchsize ${MAXBATCHSIZE}"
+    )
+fi
 
 PERF_OUTPUT_DIR="$(pwd)/perf-output-no-multiplex"
 mkdir -p ${PERF_OUTPUT_DIR}/${TAG}
