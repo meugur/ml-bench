@@ -4,14 +4,14 @@ set -e
 
 DEVICE="cpu"
 MODEL="mobilenet"
-IMAGE="meugur/mlperf-inference"
+IMAGE="meugur/mlperf-inference:18.04"
 
 # Configurations
 CPU=0
 BACKEND=${1:-"tf"}
 SCENARIO=${2:-"SingleStream"}
 DATASET="/root/datasets/imagenet"
-DATAFORMAT="NCHW" # NCHW or NHWC
+DATAFORMAT="NHWC" # NCHW or NHWC
 MAXBATCHSIZE=128
 THREADS=1
 MAXTIME=120
@@ -37,13 +37,11 @@ WORKLOAD=(
     "--max-batchsize ${MAXBATCHSIZE}"
 )
 
-PERF_OUTPUT_DIR="$(pwd)/perf-output-no-multiplex"
+PERF_OUTPUT_DIR="$(pwd)/perf-output-no-multiplex-18.04"
 mkdir -p ${PERF_OUTPUT_DIR}/${TAG}
 
-source scripts/setup-env.sh
-
-source scripts/toplev.sh l1
-source scripts/toplev.sh l2
+# source scripts/setup-env.sh
+# source scripts/toplev.sh l1
+# source scripts/toplev.sh l2
 source scripts/toplev.sh l3
-
-source scripts/revert-env.sh
+# source scripts/revert-env.sh

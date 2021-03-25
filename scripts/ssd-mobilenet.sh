@@ -4,7 +4,7 @@ set -e
 
 DEVICE="cpu"
 MODEL="ssd-mobilenet"
-IMAGE="meugur/mlperf-inference"
+IMAGE="meugur/mlperf-inference:18.04"
 
 # Configurations
 CPU=0
@@ -57,13 +57,11 @@ if [[ ${BACKEND} == "pytorch" ]]; then
     )
 fi
 
-PERF_OUTPUT_DIR="$(pwd)/perf-output-no-multiplex"
+PERF_OUTPUT_DIR="$(pwd)/perf-output-no-multiplex-18.04"
 mkdir -p ${PERF_OUTPUT_DIR}/${TAG}
 
-source scripts/setup-env.sh
-
-source scripts/toplev.sh l1
-source scripts/toplev.sh l2
+# source scripts/setup-env.sh
+# source scripts/toplev.sh l1
+# source scripts/toplev.sh l2
 source scripts/toplev.sh l3
-
-source scripts/revert-env.sh
+# source scripts/revert-env.sh
