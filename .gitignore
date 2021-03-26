@@ -3,3 +3,4 @@ reports/
 perf-output*
 docker/datasets/
 docker/models/
+docker/tf-packages/
