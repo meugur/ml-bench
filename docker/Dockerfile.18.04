@@ -2,7 +2,8 @@ FROM ubuntu:18.04
 
 LABEL maintainer="Muhammed Ugur <meugur@umich.edu>"
 
-ARG TF_WHL_PACKAGE
+ARG TF_WHL_PACKAGE=tensorflow-2.4.1-cp36-cp36m-linux_x86_64.whl
+ARG TF_WHL_DIR
 
 SHELL ["/bin/bash", "-c"]
 
@@ -23,7 +24,7 @@ RUN apt clean
 
 RUN pip3 install --upgrade pip
 
-COPY $TF_WHL_PACKAGE /root/
+COPY $TF_WHL_DIR/$TF_WHL_PACKAGE /root/
 
 RUN pip install /root/$TF_WHL_PACKAGE
 RUN pip install \
