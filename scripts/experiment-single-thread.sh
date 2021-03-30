@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 CPU=0
-THREADS=2
+THREADS=1
 DEVICE="cpu"
 MODELS=(
     'resnet50'
@@ -19,25 +19,20 @@ if [[ -z ${IMAGE} || -z ${OUTPUT_DIR} ]]; then
 fi
 
 # Setup benchmarking environment
-source scripts/setup-perf-env.sh
-for i in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
-    echo performance | sudo tee $i
-done
-echo 1 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
-echo 3 | sudo tee /proc/sys/vm/drop_caches && sync
+source scripts/setup-env.sh
 
 for MODEL in "${MODELS[@]}"; do
     source scripts/${MODEL}.sh ${BACKEND} SingleStream
     PERF_OUTPUT_DIR=${OUTPUT_DIR}/${TAG}
     mkdir -p ${PERF_OUTPUT_DIR}
-    source scripts/toplev-smt.sh l3
+    source scripts/toplev.sh l3
 done
 
 for MODEL in "${MODELS[@]}"; do
     source scripts/${MODEL}.sh ${BACKEND} MultiStream
     PERF_OUTPUT_DIR=${OUTPUT_DIR}/${TAG}
     mkdir -p ${PERF_OUTPUT_DIR}
-    source scripts/toplev-smt.sh l3
+    source scripts/toplev.sh l3
 done
 
 source scripts/revert-env.sh
