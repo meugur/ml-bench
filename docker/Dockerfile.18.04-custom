@@ -2,6 +2,11 @@ FROM ubuntu:18.04
 
 LABEL maintainer="Muhammed Ugur <meugur@umich.edu>"
 
+ARG TF_WHL_PACKAGE=tensorflow-2.4.1-cp36-cp36m-linux_x86_64.whl
+ARG TF_WHL_DIR
+ARG PT_WHL_PACKAGE=torch-1.8.1-cp36-cp36m-linux_x86_64.whl
+ARG PT_WHL_DIR
+
 SHELL ["/bin/bash", "-c"]
 
 ENV LANG C.UTF-8
@@ -10,22 +15,26 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get install -y \
-      git \
-      build-essential \
-      software-properties-common \
-      ca-certificates \
-      wget \
-      curl \
-      python3-pip \
-      linux-tools-generic
+    git \
+    build-essential \
+    software-properties-common \
+    ca-certificates \
+    wget \
+    curl \
+    python3-pip \
+    linux-tools-generic \
+    libomp-dev
 RUN apt clean
 
 RUN rm /usr/bin/perf && ln -s /usr/lib/linux-tools-4.15.0-140/perf /usr/bin/perf
 
 RUN pip3 install --upgrade pip
 
-RUN pip install tensorflow==2.4.1
-RUN pip install torch
+COPY $TF_WHL_DIR/$TF_WHL_PACKAGE /root/
+COPY $PT_WHL_DIR/$PT_WHL_PACKAGE /root/
+
+RUN pip install /root/$PT_WHL_PACKAGE
+RUN pip install /root/$TF_WHL_PACKAGE
 RUN pip install \
     opencv-python-headless \
     pycocotools \

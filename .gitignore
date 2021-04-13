@@ -1,6 +1,7 @@
 env/
 reports/
-perf-output*
+results/
 docker/datasets/
 docker/models/
-docker/tf-packages/
+docker/wheels/
+docker/source/

@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.10
 
 LABEL maintainer="Muhammed Ugur <meugur@umich.edu>"
 
@@ -20,21 +20,15 @@ RUN apt-get install -y \
       linux-tools-generic
 RUN apt clean
 
-RUN rm /usr/bin/perf && ln -s /usr/lib/linux-tools-4.15.0-140/perf /usr/bin/perf
+RUN rm /usr/bin/perf && ln -s /usr/lib/linux-tools-5.8.0-48/perf /usr/bin/perf
 
 RUN pip3 install --upgrade pip
 
-RUN pip install tensorflow==2.4.1
-RUN pip install torch
 RUN pip install \
     opencv-python-headless \
     pycocotools \
-    future \
-    onnx \
-    onnxruntime \
-    pillow \
-    torchvision
-
+    tensorflow \
+    numpy==1.20.0
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN cd /root && git clone --recursive https://github.com/mlcommons/inference && \
@@ -46,8 +40,7 @@ RUN python \
     /root/inference/vision/classification_and_detection/tools/ssd-nhwc.py \
     /root/models/resnet34_tf.22.1.pb && \
     mv /root/models/resnet34_tf.22.1.pb.patch /root/models/resnet34_tf.22.1.pb
-
 ADD ["datasets/", "/root/datasets/"]
+ADD ["data/", "/root/data/"]
 
 WORKDIR /root/inference/vision/classification_and_detection
-
