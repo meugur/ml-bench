@@ -1,0 +1,27 @@
+FROM ubuntu:20.10
+
+LABEL maintainer="Muhammed Ugur <meugur@umich.edu>"
+
+SHELL ["/bin/bash", "-c"]
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update
+RUN apt-get install -y \
+    clang \
+    git \
+    build-essential \
+    cmake \
+    software-properties-common \
+    curl \
+    wget \
+    python3-pip
+RUN apt clean
+
+RUN pip3 install --upgrade pip
+RUN pip install numpy scikit-build
+
+RUN git clone --recursive https://github.com/opencv/opencv-python.git
+
+WORKDIR /opencv-python
+

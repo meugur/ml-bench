@@ -1,0 +1,29 @@
+FROM ubuntu:18.04
+
+LABEL maintainer="Muhammed Ugur <meugur@umich.edu>"
+
+SHELL ["/bin/bash", "-c"]
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update
+RUN apt-get install -y \
+    clang \
+    git \
+    python3-pip \
+    build-essential \
+    software-properties-common \
+    cmake \
+    wget \
+    curl
+RUN apt clean
+
+RUN pip3 install --upgrade pip
+
+RUN git clone --recursive https://github.com/pytorch/pytorch.git
+
+RUN cd pytorch && \
+    git checkout release/1.8 && \
+    pip install -r requirements.txt
+
+WORKDIR /pytorch
