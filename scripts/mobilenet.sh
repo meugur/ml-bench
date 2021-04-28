@@ -33,7 +33,7 @@ MLPERF_FLAGS=(
 )
 COMMAND="./run_local.sh ${MLPERF_FLAGS[@]}"
 if [[ -n ${PERF_FLAGS[@]} ]]; then
-    COMMAND="perf record ${PERF_FLAGS[@]} -o ${OUTPUT}/${IMAGE##*:}-${DATE}/perf.data -- ${COMMAND}"
+    COMMAND="perf ${PERF_FLAGS[@]} -o ${OUTPUT}/${IMAGE##*:}-${DATE}/${PERF_OUTPUT} -- ${COMMAND}"
     PRIV="--privileged"
 fi
 

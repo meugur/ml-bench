@@ -20,7 +20,7 @@ RUN apt clean
 
 RUN pip3 install --upgrade pip
 
-ADD ["pt/pytorch/", "/root/pytorch/"]
+ADD ["source/pytorch/", "/root/pytorch/"]
 
 RUN cd /root/pytorch && pip install -r requirements.txt
 

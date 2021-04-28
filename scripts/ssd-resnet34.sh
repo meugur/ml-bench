@@ -15,6 +15,10 @@ TAG="${MODEL}-${BACKEND}-${DEVICE}-${SCENARIO}"
 PERF_OUTPUT_DIR=${OUTPUT_DIR}/${TAG}
 mkdir -p ${PERF_OUTPUT_DIR}/results
 
+if [[ ${BACKEND} == "pytorch" ]]; then
+    DATAFORMAT="NCHW"
+fi
+
 MLPERF_FLAGS=(
     "${BACKEND}"
     "${MODEL}"
@@ -29,7 +33,7 @@ MLPERF_FLAGS=(
 )
 COMMAND="./run_local.sh ${MLPERF_FLAGS[@]}"
 if [[ -n ${PERF_FLAGS[@]} ]]; then
-    COMMAND="perf record ${PERF_FLAGS[@]} -o ${OUTPUT}/${IMAGE##*:}-${DATE}/perf.data -- ${COMMAND}"
+    COMMAND="perf ${PERF_FLAGS[@]} -o ${OUTPUT}/${IMAGE##*:}-${DATE}/${PERF_OUTPUT} -- ${COMMAND}"
     PRIV="--privileged"
 fi
 

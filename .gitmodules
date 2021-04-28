@@ -1,6 +1,3 @@
-[submodule "ck-mlperf"]
-	path = ck-mlperf
-	url = git@github.com:ctuning/ck-mlperf.git
 [submodule "inference"]
 	path = inference
 	url = git@github.com:mlcommons/inference.git

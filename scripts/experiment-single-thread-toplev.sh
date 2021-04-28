@@ -16,15 +16,8 @@ if [[ -z ${IMAGE} || -z ${CPU} || -z ${COUNT} || -z ${MODEL} || -z ${BACKEND}  |
     exit 1
 fi
 
-PERF_FLAGS=(
-    "stat"
-    "-C ${CPU}"
-    '-e r1a6,r2a6,r4a6,r8a6,r10a6'
-    '-r 10'
-)
-PERF_OUTPUT="ports_util.log"
-
 source scripts/setup-env.sh
 source scripts/${MODEL}.sh
-eval ${WORKLOAD[@]}
+source scripts/toplev.sh l3
 source scripts/revert-env.sh
+
