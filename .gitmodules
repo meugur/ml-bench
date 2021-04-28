@@ -1,6 +1,3 @@
-[submodule "inference"]
-	path = inference
-	url = git@github.com:mlcommons/inference.git
 [submodule "pmu-tools"]
 	path = pmu-tools
 	url = git@github.com:andikleen/pmu-tools.git

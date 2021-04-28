@@ -11,24 +11,12 @@ MODEL=$4
 IMAGE=$5
 CPU=$6
 
-if [[ -z ${IMAGE} || -z ${CPU} || -z ${COUNT} || -z ${MODEL} || -z ${BACKEND}  || -z ${OUTPUT_DIR} ]]; then
+if [[ -z ${IMAGE} || -z ${CPU} || -z ${COUNT} || -z ${MODEL} || -z ${BACKEND} || -z ${OUTPUT_DIR} ]]; then
     echo "Usage: $0 output_dir count backend model image cpu"
     exit 1
 fi
 
-
-# source scripts/setup-env.sh
-
-IMAGE="meugur/mlperf-inference:18.04-full-opt"
+source scripts/setup-env.sh
 source scripts/${MODEL}.sh
 eval ${WORKLOAD[@]}
-
-IMAGE="meugur/mlperf-inference:18.04-no-vec"
-source scripts/${MODEL}.sh
-eval ${WORKLOAD[@]}
-
-IMAGE="meugur/mlperf-inference:18.04-cust-opt"
-source scripts/${MODEL}.sh
-eval ${WORKLOAD[@]}
-
-# source scripts/revert-env.sh
+source scripts/revert-env.sh

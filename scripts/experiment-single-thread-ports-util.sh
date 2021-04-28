@@ -11,7 +11,7 @@ MODEL=$4
 IMAGE=$5
 CPU=$6
 
-if [[ -z ${IMAGE} || -z ${CPU} || -z ${COUNT} || -z ${MODEL} || -z ${BACKEND}  || -z ${OUTPUT_DIR} ]]; then
+if [[ -z ${IMAGE} || -z ${CPU} || -z ${COUNT} || -z ${MODEL} || -z ${BACKEND} || -z ${OUTPUT_DIR} ]]; then
     echo "Usage: $0 output_dir count backend model image cpu"
     exit 1
 fi
